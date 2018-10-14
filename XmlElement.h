@@ -16,8 +16,22 @@ private:
     string pcData;
     vector<XmlAttribute> attributes;
     XmlElement* parent;
-    XmlElement* child;
-    XmlElement* sibling;
+    XmlElement* firstChild;
+    XmlElement* nextSibling;
+public:
+    XmlElement(string name, XmlElement* parent, bool hasAttributes);
+    ~XmlElement();
+    string getName();
+    XmlElement* getFirstChild();
+    XmlElement* getNextSibling();
+    XmlElement* getParent();
+    void setAttributeValue(string attributeName, string attributeValue);
+    string getAttributeValue(string attributeName);
+    void print(ofstream& outputStream, int level);
+    void setNextSibling(XmlElement* nextSibling);
+    void setFirstChild(XmlElement* firstChild);
+    void addAttribute(XmlAttribute xmlAttribute);
+    void setPcData(string pcData);
 };
 
 

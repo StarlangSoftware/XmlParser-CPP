@@ -8,3 +8,9 @@ cmake-build-debug/CMakeFiles/XmlParser.dir/DependInfo.cmake
 cmake-build-debug/CMakeFiles/XmlParser.dir/flags.make
 cmake-build-debug/CMakeFiles/XmlParser.dir/link.txt
 cmake-build-debug/CMakeFiles/XmlParser.dir/progress.make
+cmake-build-debug/libXmlParser.a
+cmake-build-debug/CMakeFiles/XmlParser.dir/CXX.includecache
+cmake-build-debug/CMakeFiles/XmlParser.dir/depend.internal
+cmake-build-debug/CMakeFiles/XmlParser.dir/XmlAttribute.cpp.o
+cmake-build-debug/CMakeFiles/XmlParser.dir/XmlDocument.cpp.o
+cmake-build-debug/CMakeFiles/XmlParser.dir/XmlElement.cpp.o

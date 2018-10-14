@@ -12,6 +12,13 @@ class XmlAttribute {
 private:
     string name;
     string value;
+public:
+    XmlAttribute();
+    XmlAttribute(string name);
+    string getName();
+    string getValue();
+    void setValue(string value);
+    string to_String();
 };
 
 
