@@ -238,3 +238,7 @@ void XmlDocument::parse() {
     }
     inputStream.close();
 }
+
+XmlElement *XmlDocument::getFirstChild() {
+    return root;
+}

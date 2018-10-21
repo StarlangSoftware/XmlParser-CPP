@@ -26,6 +26,7 @@ public:
     XmlDocument(string fileName);
     void print(string fileName);
     void parse();
+    XmlElement* getFirstChild();
 };
 
 

@@ -108,10 +108,18 @@ string XmlElement::getName() {
     return name;
 }
 
+string XmlElement::getPcData() {
+    return pcData;
+}
+
 void XmlElement::addAttribute(XmlAttribute xmlAttribute) {
     attributes.push_back(xmlAttribute);
 }
 
 void XmlElement::setPcData(string pcData) {
     this->pcData = move(pcData);
+}
+
+bool XmlElement::hasAttributes() {
+    return !attributes.empty();
 }

@@ -22,6 +22,7 @@ public:
     XmlElement(string name, XmlElement* parent, bool hasAttributes);
     ~XmlElement();
     string getName();
+    string getPcData();
     XmlElement* getFirstChild();
     XmlElement* getNextSibling();
     XmlElement* getParent();
@@ -32,6 +33,7 @@ public:
     void setFirstChild(XmlElement* firstChild);
     void addAttribute(XmlAttribute xmlAttribute);
     void setPcData(string pcData);
+    bool hasAttributes();
 };
 
 
