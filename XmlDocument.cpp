@@ -158,85 +158,90 @@ void XmlDocument::parse() {
     string token;
     XmlAttribute xmlAttribute;
     XmlElement* sibling = nullptr, *current = nullptr, *parent = nullptr;
-    inputStream.open(fileName, ios::in);
-    token = getNextToken();
-    while (lastReadTokenType != XmlTokenType::XML_END){
-        switch (lastReadTokenType){
-            case XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES:
-            case XmlTokenType::XML_OPENING_TAG_WITHOUT_ATTRIBUTES:
-                current = new XmlElement(token, parent, lastReadTokenType == XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES);
-                if (parent) {
-                    if (sibling && siblingClosed) {
-                        sibling->setNextSibling(current);
-                        sibling = current;
+    inputStream.exceptions(ifstream::failbit | ifstream::badbit);
+    try{
+        inputStream.open(fileName, ios::in);
+        token = getNextToken();
+        while (lastReadTokenType != XmlTokenType::XML_END){
+            switch (lastReadTokenType){
+                case XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES:
+                case XmlTokenType::XML_OPENING_TAG_WITHOUT_ATTRIBUTES:
+                    current = new XmlElement(token, parent, lastReadTokenType == XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES);
+                    if (parent) {
+                        if (sibling && siblingClosed) {
+                            sibling->setNextSibling(current);
+                            sibling = current;
+                        } else {
+                            parent->setFirstChild(current);
+                        }
                     } else {
-                        parent->setFirstChild(current);
+                        if (!root){
+                            root = current;
+                        }
                     }
-                } else {
-                    if (!root){
-                        root = current;
+                    parent = current;
+                    siblingClosed = false;
+                    if (lastReadTokenType == XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES){
+                        textType = XmlTextType::XML_TEXT_ATTRIBUTE;
+                    } else {
+                        textType = XmlTextType::XML_TEXT_VALUE;
                     }
-                }
-                parent = current;
-                siblingClosed = false;
-                if (lastReadTokenType == XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES){
-                    textType = XmlTextType::XML_TEXT_ATTRIBUTE;
-                } else {
+                    break;
+                case XmlTokenType::XML_OPENING_TAG_FINISH:
                     textType = XmlTextType::XML_TEXT_VALUE;
-                }
-                break;
-            case XmlTokenType::XML_OPENING_TAG_FINISH:
-                textType = XmlTextType::XML_TEXT_VALUE;
-                siblingClosed = false;
-                break;
-            case XmlTokenType::XML_CLOSING_TAG_WITH_ATTRIBUTES:
-                sibling = current;
-                parent = current->getParent();
-                textType = XmlTextType::XML_TEXT_VALUE;
-                siblingClosed = true;
-                break;
-            case XmlTokenType::XML_CLOSING_TAG_WITHOUT_ATTRIBUTES:
-                if (token == current->getName()) {
+                    siblingClosed = false;
+                    break;
+                case XmlTokenType::XML_CLOSING_TAG_WITH_ATTRIBUTES:
                     sibling = current;
                     parent = current->getParent();
-                } else {
-                    if (token == current->getParent()->getName()) {
-                        sibling = parent;
-                        parent = current->getParent()->getParent();
-                        current = current->getParent();
+                    textType = XmlTextType::XML_TEXT_VALUE;
+                    siblingClosed = true;
+                    break;
+                case XmlTokenType::XML_CLOSING_TAG_WITHOUT_ATTRIBUTES:
+                    if (token == current->getName()) {
+                        sibling = current;
+                        parent = current->getParent();
+                    } else {
+                        if (token == current->getParent()->getName()) {
+                            sibling = parent;
+                            parent = current->getParent()->getParent();
+                            current = current->getParent();
+                        }
                     }
-                }
-                siblingClosed = true;
-                textType = XmlTextType::XML_TEXT_VALUE;
-                break;
-            case XmlTokenType::XML_ATTRIBUTE_VALUE:
-                if (!token.empty()){
-                    xmlAttribute.setValue(token);
-                } else {
-                    xmlAttribute.setValue("");
-                }
-                textType = XmlTextType::XML_TEXT_ATTRIBUTE;
-                break;
-            case XmlTokenType::XML_EQUAL:
-                textType = XmlTextType::XML_TEXT_NOT_AVAILABLE;
-                break;
-            case XmlTokenType::XML_TEXT:
-                if (textType == XmlTextType::XML_TEXT_ATTRIBUTE) {
-                    xmlAttribute = XmlAttribute(token);
-                    current->addAttribute(xmlAttribute);
-                } else {
-                    if (textType == XmlTextType::XML_TEXT_VALUE){
-                        current->setPcData(token);
+                    siblingClosed = true;
+                    textType = XmlTextType::XML_TEXT_VALUE;
+                    break;
+                case XmlTokenType::XML_ATTRIBUTE_VALUE:
+                    if (!token.empty()){
+                        xmlAttribute.setValue(token);
+                    } else {
+                        xmlAttribute.setValue("");
                     }
-                }
-                break;
-            default:
-                cout << "This token type not supported\n";
-                break;
+                    textType = XmlTextType::XML_TEXT_ATTRIBUTE;
+                    break;
+                case XmlTokenType::XML_EQUAL:
+                    textType = XmlTextType::XML_TEXT_NOT_AVAILABLE;
+                    break;
+                case XmlTokenType::XML_TEXT:
+                    if (textType == XmlTextType::XML_TEXT_ATTRIBUTE) {
+                        xmlAttribute = XmlAttribute(token);
+                        current->addAttribute(xmlAttribute);
+                    } else {
+                        if (textType == XmlTextType::XML_TEXT_VALUE){
+                            current->setPcData(token);
+                        }
+                    }
+                    break;
+                default:
+                    cout << "This token type not supported\n";
+                    break;
+            }
+            token = getNextToken();
         }
-        token = getNextToken();
+        inputStream.close();
+    } catch (ifstream::failure e) {
+        cout << "Exception opening file " << fileName;
     }
-    inputStream.close();
 }
 
 XmlElement *XmlDocument::getFirstChild() {
