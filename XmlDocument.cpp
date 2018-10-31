@@ -56,7 +56,7 @@ string XmlDocument::parseTag() {
     if (lastReadTokenType == XmlTokenType::XML_CLOSING_TAG_WITHOUT_ATTRIBUTES && ch != '>') {
         cout << "Wrong tag value";
         lastReadTokenType = XmlTokenType::XML_END;
-        return nullptr;
+        return "";
     }
     else{
         return token;
@@ -79,7 +79,7 @@ string XmlDocument::parseAttributeValue() {
     if (ch != '\'' && ch != '\"') {
         cout << "Wrong attribute value";
         lastReadTokenType = XmlTokenType::XML_END;
-        return nullptr;
+        return "";
     }
     lastReadTokenType = XmlTokenType::XML_ATTRIBUTE_VALUE;
     return token;
@@ -103,39 +103,41 @@ string XmlDocument::parseEmptyTag() {
 
 /**
  * Gets next token from file.
- * @return Token read. If not successful, returns nullptr.
+ * @return Token read. If not successful, returns empty string.
  */
 string XmlDocument::getNextToken() {
     char ch;
     string token;
-    inputStream.get(ch);
-    while (ch == ' ' || ch == '\t' || ch == '\n'){
+    try{
         inputStream.get(ch);
+        while (ch == ' ' || ch == '\t' || ch == '\n'){
+            inputStream.get(ch);
+        }
+        switch (ch){
+            case  '<':
+                return parseTag();
+            case '\"':
+            case '\'':
+                return parseAttributeValue();
+            case  '/':
+                return parseEmptyTag();
+            case  '=':
+                lastReadTokenType = XmlTokenType::XML_EQUAL;
+                break;
+            case  '>':
+                lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
+                return "";
+            default  :
+                token = readToken(ch, &ch, true);
+                lastReadTokenType = XmlTokenType::XML_TEXT;
+                inputStream.putback(ch);
+                return token;
+        }
+    } catch (ifstream::failure e) {
+        lastReadTokenType = XmlTokenType::XML_END;
+        return "";
     }
-    switch (ch){
-        case  '<':
-            return parseTag();
-        case '\"':
-        case '\'':
-            return parseAttributeValue();
-        case  '/':
-            return parseEmptyTag();
-        case  '=':
-            lastReadTokenType = XmlTokenType::XML_EQUAL;
-            break;
-        case  '>':
-            lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
-            return nullptr;
-        case  EOF:
-            lastReadTokenType = XmlTokenType::XML_END;
-            return nullptr;
-        default  :
-            token = readToken(ch, &ch, true);
-            lastReadTokenType = XmlTokenType::XML_TEXT;
-            inputStream.putback(ch);
-            return token;
-    }
-    return nullptr;
+    return "";
 }
 
 /**
@@ -166,7 +168,7 @@ void XmlDocument::parse() {
             switch (lastReadTokenType){
                 case XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES:
                 case XmlTokenType::XML_OPENING_TAG_WITHOUT_ATTRIBUTES:
-                    current = new XmlElement(token, parent, lastReadTokenType == XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES);
+                    current = new XmlElement(token, parent);
                     if (parent) {
                         if (sibling && siblingClosed) {
                             sibling->setNextSibling(current);
@@ -217,6 +219,7 @@ void XmlDocument::parse() {
                     } else {
                         xmlAttribute.setValue("");
                     }
+                    current->addAttribute(xmlAttribute);
                     textType = XmlTextType::XML_TEXT_ATTRIBUTE;
                     break;
                 case XmlTokenType::XML_EQUAL:
@@ -225,7 +228,6 @@ void XmlDocument::parse() {
                 case XmlTokenType::XML_TEXT:
                     if (textType == XmlTextType::XML_TEXT_ATTRIBUTE) {
                         xmlAttribute = XmlAttribute(token);
-                        current->addAttribute(xmlAttribute);
                     } else {
                         if (textType == XmlTextType::XML_TEXT_VALUE){
                             current->setPcData(token);
@@ -246,4 +248,8 @@ void XmlDocument::parse() {
 
 XmlElement *XmlDocument::getFirstChild() {
     return root;
+}
+
+XmlDocument::~XmlDocument() {
+    delete root;
 }

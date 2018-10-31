@@ -7,4 +7,5 @@ int main(){
     string fileName = "test.xml";
     XmlDocument xmlDocument(fileName);
     xmlDocument.parse();
+    xmlDocument.print("deneme.xml");
 }

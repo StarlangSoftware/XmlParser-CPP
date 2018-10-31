@@ -24,6 +24,7 @@ private:
     string getNextToken();
 public:
     XmlDocument(string fileName);
+    ~XmlDocument();
     void print(string fileName);
     void parse();
     XmlElement* getFirstChild();

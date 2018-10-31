@@ -26,7 +26,7 @@ void XmlAttribute::setValue(string value) {
 }
 
 string XmlAttribute::to_String(){
-    return name + " = \"" + value + "\"";
+    return name + "=\"" + value + "\"";
 }
 
 XmlAttribute::XmlAttribute() {

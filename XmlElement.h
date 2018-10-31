@@ -12,14 +12,14 @@ using namespace std;
 
 class XmlElement {
 private:
-    string name;
-    string pcData;
+    string name = "";
+    string pcData = "";
     vector<XmlAttribute> attributes;
     XmlElement* parent;
     XmlElement* firstChild;
     XmlElement* nextSibling;
 public:
-    XmlElement(string name, XmlElement* parent, bool hasAttributes);
+    XmlElement(string name, XmlElement* parent);
     ~XmlElement();
     string getName();
     string getPcData();
