@@ -27,7 +27,7 @@ XmlDocument::XmlDocument(string fileName) {
 string XmlDocument::readToken(char previousChar, char* nextChar, bool extraAllowed) {
     string buffer;
     char ch = previousChar;
-    while ((ch != '\'') && (ch != '\"') && (ch != '=') && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
+    while ((ch != '\'' || extraAllowed) && (ch != '\"') && (ch != '=') && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
         buffer += ch;
         inputStream.get(ch);
     }
