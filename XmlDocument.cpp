@@ -21,13 +21,13 @@ XmlDocument::XmlDocument(string fileName) {
  * Reads a token character by character from xml file.
  * @param previousChar Previous character read
  * @param nextChar The character after the token
- * @param spaceAllowed If true, space is allowed in the token, otherwise it is not allowed
+ * @param extraAllowed If true, space or slash is allowed in the token, otherwise it is not allowed
  * @return Token read
  */
-string XmlDocument::readToken(char previousChar, char* nextChar, bool spaceAllowed) {
+string XmlDocument::readToken(char previousChar, char* nextChar, bool extraAllowed) {
     string buffer;
     char ch = previousChar;
-    while ((ch != '\'') && (ch != '\"') && (ch != '=') && (ch != ' ' || spaceAllowed) && (ch != '/') && (ch != EOF) && (ch != '<') && (ch != '>')) {
+    while ((ch != '\'') && (ch != '\"') && (ch != '=') && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
         buffer += ch;
         inputStream.get(ch);
     }
@@ -73,7 +73,7 @@ string XmlDocument::parseAttributeValue() {
     inputStream.get(ch);
     if (ch == '\'' || ch == '\"') {
         lastReadTokenType = XmlTokenType::XML_ATTRIBUTE_VALUE;
-        return nullptr;
+        return "";
     }
     token = readToken(ch, &ch, true);
     if (ch != '\'' && ch != '\"') {
@@ -98,7 +98,7 @@ string XmlDocument::parseEmptyTag() {
     } else {
         lastReadTokenType = XmlTokenType::XML_CLOSING_TAG_WITH_ATTRIBUTES;
     }
-    return nullptr;
+    return "";
 }
 
 /**

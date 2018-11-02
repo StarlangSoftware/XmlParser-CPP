@@ -17,7 +17,7 @@ private:
     ifstream inputStream;
     XmlTokenType lastReadTokenType;
     XmlElement* root;
-    string readToken(char previousChar, char* nextChar, bool spaceAllowed);
+    string readToken(char previousChar, char* nextChar, bool extraAllowed);
     string parseTag();
     string parseAttributeValue();
     string parseEmptyTag();
