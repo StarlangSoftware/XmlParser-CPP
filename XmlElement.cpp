@@ -43,7 +43,7 @@ string XmlElement::getAttributeValue(string attributeName) {
             return xmlAttribute.getValue();
         }
     }
-    return nullptr;
+    return "";
 }
 
 /**
