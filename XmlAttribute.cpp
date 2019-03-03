@@ -29,5 +29,4 @@ string XmlAttribute::to_String(){
     return name + "=\"" + value + "\"";
 }
 
-XmlAttribute::XmlAttribute() {
-}
+XmlAttribute::XmlAttribute() = default;

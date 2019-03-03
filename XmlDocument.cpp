@@ -71,12 +71,12 @@ string XmlDocument::parseAttributeValue() {
     string token;
     char ch;
     inputStream.get(ch);
-    if (ch == '\'' || ch == '\"') {
+    if (ch == '\"') {
         lastReadTokenType = XmlTokenType::XML_ATTRIBUTE_VALUE;
         return "";
     }
     token = readToken(ch, &ch, true);
-    if (ch != '\'' && ch != '\"') {
+    if (ch != '\"') {
         cout << "Wrong attribute value";
         lastReadTokenType = XmlTokenType::XML_END;
         return "";
@@ -117,7 +117,6 @@ string XmlDocument::getNextToken() {
             case  '<':
                 return parseTag();
             case '\"':
-            case '\'':
                 return parseAttributeValue();
             case  '/':
                 return parseEmptyTag();
@@ -133,7 +132,7 @@ string XmlDocument::getNextToken() {
                 inputStream.putback(ch);
                 return token;
         }
-    } catch (ifstream::failure e) {
+    } catch (ifstream::failure& e) {
         lastReadTokenType = XmlTokenType::XML_END;
         return "";
     }
@@ -241,7 +240,7 @@ void XmlDocument::parse() {
             token = getNextToken();
         }
         inputStream.close();
-    } catch (ifstream::failure e) {
+    } catch (ifstream::failure& e) {
         cout << "Exception opening file " << fileName;
     }
 }
