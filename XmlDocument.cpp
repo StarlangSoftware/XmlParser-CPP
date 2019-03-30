@@ -24,10 +24,10 @@ XmlDocument::XmlDocument(string fileName) {
  * @param extraAllowed If true, space or slash is allowed in the token, otherwise it is not allowed
  * @return Token read
  */
-string XmlDocument::readToken(char previousChar, char* nextChar, bool extraAllowed) {
+string XmlDocument::readToken(char previousChar, char* nextChar, bool extraAllowed, bool quotaAllowed) {
     string buffer;
     char ch = previousChar;
-    while ((ch != '\'' || extraAllowed) && (ch != '\"') && (ch != '=') && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
+    while ((ch != '\'' || extraAllowed) && (ch != '\"' || quotaAllowed) && (ch != '=') && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
         buffer += ch;
         inputStream.get(ch);
     }
@@ -49,7 +49,7 @@ string XmlDocument::parseTag() {
     } else {
         lastReadTokenType = XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES;
     }
-    token = readToken(ch, &ch, false);
+    token = readToken(ch, &ch);
     if (ch == '>' && lastReadTokenType == XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES){
         lastReadTokenType = XmlTokenType::XML_OPENING_TAG_WITHOUT_ATTRIBUTES;
     }
@@ -127,7 +127,7 @@ string XmlDocument::getNextToken() {
                 lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
                 return "";
             default  :
-                token = readToken(ch, &ch, true);
+                token = readToken(ch, &ch, true, true);
                 lastReadTokenType = XmlTokenType::XML_TEXT;
                 inputStream.putback(ch);
                 return token;
