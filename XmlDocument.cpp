@@ -27,7 +27,7 @@ XmlDocument::XmlDocument(string fileName) {
 string XmlDocument::readToken(char previousChar, char* nextChar, bool extraAllowed, bool quotaAllowed) {
     string buffer;
     char ch = previousChar;
-    while ((ch != '\'' || extraAllowed) && (ch != '\"' || quotaAllowed) && (ch != '=' || quotaAllowed) && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
+    while ((ch != '\'' || extraAllowed) && (ch != '\"' || quotaAllowed) && (ch != '=' || quotaAllowed) && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>' || quotaAllowed)) {
         buffer += ch;
         inputStream.get(ch);
     }
@@ -138,7 +138,14 @@ string XmlDocument::getNextToken(XmlTextType xmlTextType) {
                 }
                 break;
             case  '>':
-                lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
+                if (xmlTextType == XmlTextType::XML_TEXT_VALUE){
+                    token = readToken(ch, &ch, true, true);
+                    lastReadTokenType = XmlTokenType::XML_TEXT;
+                    inputStream.putback(ch);
+                    return token;
+                } else {
+                    lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
+                }
                 return "";
             default  :
                 if (xmlTextType == XmlTextType::XML_TEXT_VALUE){
