@@ -141,7 +141,11 @@ string XmlDocument::getNextToken(XmlTextType xmlTextType) {
                 lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
                 return "";
             default  :
-                token = readToken(ch, &ch, true);
+                if (xmlTextType == XmlTextType::XML_TEXT_VALUE){
+                    token = readToken(ch, &ch, true, true);
+                } else {
+                    token = readToken(ch, &ch, true);
+                }
                 lastReadTokenType = XmlTokenType::XML_TEXT;
                 inputStream.putback(ch);
                 return token;
