@@ -27,7 +27,7 @@ XmlDocument::XmlDocument(string fileName) {
 string XmlDocument::readToken(char previousChar, char* nextChar, bool extraAllowed, bool quotaAllowed) {
     string buffer;
     char ch = previousChar;
-    while ((ch != '\'' || extraAllowed) && (ch != '\"' || quotaAllowed) && (ch != '=') && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
+    while ((ch != '\'' || extraAllowed) && (ch != '\"' || quotaAllowed) && (ch != '=' || quotaAllowed) && (ch != ' ' || extraAllowed) && (ch != '/' || extraAllowed) && (ch != EOF) && (ch != '<') && (ch != '>')) {
         buffer += ch;
         inputStream.get(ch);
     }
@@ -117,24 +117,31 @@ string XmlDocument::getNextToken(XmlTextType xmlTextType) {
             case  '<':
                 return parseTag();
             case '\"':
-                if (xmlTextType != XmlTextType::XML_TEXT_VALUE){
-                    return parseAttributeValue();
-                } else {
+                if (xmlTextType == XmlTextType::XML_TEXT_VALUE){
                     token = readToken(ch, &ch, true, true);
                     lastReadTokenType = XmlTokenType::XML_TEXT;
                     inputStream.putback(ch);
                     return token;
+                } else {
+                    return parseAttributeValue();
                 }
             case  '/':
                 return parseEmptyTag();
             case  '=':
-                lastReadTokenType = XmlTokenType::XML_EQUAL;
+                if (xmlTextType == XmlTextType::XML_TEXT_VALUE){
+                    token = readToken(ch, &ch, true, true);
+                    lastReadTokenType = XmlTokenType::XML_TEXT;
+                    inputStream.putback(ch);
+                    return token;
+                } else {
+                    lastReadTokenType = XmlTokenType::XML_EQUAL;
+                }
                 break;
             case  '>':
                 lastReadTokenType = XmlTokenType::XML_OPENING_TAG_FINISH;
                 return "";
             default  :
-                token = readToken(ch, &ch, true, true);
+                token = readToken(ch, &ch, true);
                 lastReadTokenType = XmlTokenType::XML_TEXT;
                 inputStream.putback(ch);
                 return token;
