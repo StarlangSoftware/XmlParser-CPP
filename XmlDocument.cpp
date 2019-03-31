@@ -105,7 +105,7 @@ string XmlDocument::parseEmptyTag() {
  * Gets next token from file.
  * @return Token read. If not successful, returns empty string.
  */
-string XmlDocument::getNextToken() {
+string XmlDocument::getNextToken(XmlTextType xmlTextType) {
     char ch;
     string token;
     try{
@@ -117,7 +117,14 @@ string XmlDocument::getNextToken() {
             case  '<':
                 return parseTag();
             case '\"':
-                return parseAttributeValue();
+                if (xmlTextType != XmlTextType::XML_TEXT_VALUE){
+                    return parseAttributeValue();
+                } else {
+                    token = readToken(ch, &ch, true, true);
+                    lastReadTokenType = XmlTokenType::XML_TEXT;
+                    inputStream.putback(ch);
+                    return token;
+                }
             case  '/':
                 return parseEmptyTag();
             case  '=':
@@ -162,7 +169,7 @@ void XmlDocument::parse() {
     inputStream.exceptions(ifstream::failbit | ifstream::badbit);
     try{
         inputStream.open(fileName, ios::in);
-        token = getNextToken();
+        token = getNextToken(textType);
         while (lastReadTokenType != XmlTokenType::XML_END){
             switch (lastReadTokenType){
                 case XmlTokenType::XML_OPENING_TAG_WITH_ATTRIBUTES:
@@ -239,7 +246,7 @@ void XmlDocument::parse() {
                     cout << "This token type not supported\n";
                     break;
             }
-            token = getNextToken();
+            token = getNextToken(textType);
         }
         inputStream.close();
     } catch (ifstream::failure& e) {
