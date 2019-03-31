@@ -214,6 +214,7 @@ void XmlDocument::parse() {
                     break;
                 case XmlTokenType::XML_ATTRIBUTE_VALUE:
                     if (!token.empty()){
+                        replaceEscapeCharacters(token);
                         xmlAttribute.setValue(token);
                     } else {
                         xmlAttribute.setValue("");
@@ -229,6 +230,7 @@ void XmlDocument::parse() {
                         xmlAttribute = XmlAttribute(token);
                     } else {
                         if (textType == XmlTextType::XML_TEXT_VALUE){
+                            replaceEscapeCharacters(token);
                             current->setPcData(token);
                         }
                     }
@@ -251,4 +253,22 @@ XmlElement *XmlDocument::getFirstChild() {
 
 XmlDocument::~XmlDocument() {
     delete root;
+}
+
+void XmlDocument::replaceEscapeCharacters(string& token) {
+    while (token.find("&quot;") != string::npos){
+        token.replace(token.find("&quot;"), 6, "\"");
+    }
+    while (token.find("&amp;") != string::npos){
+        token.replace(token.find("&amp;"), 5, "&");
+    }
+    while (token.find("&lt;") != string::npos){
+        token.replace(token.find("&lt;"), 4, "<");
+    }
+    while (token.find("&gt;") != string::npos){
+        token.replace(token.find("&lt;"), 4, ">");
+    }
+    while (token.find("&apos;") != string::npos){
+        token.replace(token.find("&apos;"), 6, "'");
+    }
 }

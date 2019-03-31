@@ -22,6 +22,7 @@ private:
     string parseAttributeValue();
     string parseEmptyTag();
     string getNextToken();
+    void replaceEscapeCharacters(string& token);
 public:
     explicit XmlDocument(string fileName);
     ~XmlDocument();
