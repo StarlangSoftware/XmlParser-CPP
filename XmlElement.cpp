@@ -24,7 +24,7 @@ XmlElement::XmlElement(string name, XmlElement* parent) {
  * @param attributeName Name of the attribute
  * @param attributeValue New attribute value
  */
-void XmlElement::setAttributeValue(string attributeName, string attributeValue) {
+void XmlElement::setAttributeValue(const string& attributeName, const string& attributeValue) {
     for (XmlAttribute xmlAttribute : attributes){
         if (xmlAttribute.getName() == attributeName){
             xmlAttribute.setValue(attributeValue);
@@ -37,7 +37,7 @@ void XmlElement::setAttributeValue(string attributeName, string attributeValue) 
  * @param[in] attributeName Name of the attribute
  * @return If the Xml element has such an attribute returns its value, otherwise it returns NULL
  */
-string XmlElement::getAttributeValue(string attributeName) {
+string XmlElement::getAttributeValue(const string& attributeName) {
     for (XmlAttribute xmlAttribute : attributes){
         if (xmlAttribute.getName() == attributeName){
             return xmlAttribute.getValue();
@@ -123,4 +123,12 @@ void XmlElement::setPcData(string pcData) {
 
 bool XmlElement::hasAttributes() {
     return !attributes.empty();
+}
+
+int XmlElement::attributeSize() {
+    return attributes.size();
+}
+
+XmlAttribute XmlElement::getAttribute(int index) {
+    return attributes.at(index);
 }
