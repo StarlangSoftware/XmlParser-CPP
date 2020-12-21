@@ -291,7 +291,7 @@ void XmlDocument::replaceEscapeCharacters(string& token) {
         token.replace(token.find("&lt;"), 4, "<");
     }
     while (token.find("&gt;") != string::npos){
-        token.replace(token.find("&lt;"), 4, ">");
+        token.replace(token.find("&gt;"), 4, ">");
     }
     while (token.find("&apos;") != string::npos){
         token.replace(token.find("&apos;"), 6, "'");
