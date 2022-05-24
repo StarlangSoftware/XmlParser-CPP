@@ -53,8 +53,6 @@ cmake-build-debug/CMakeFiles/3.12.2/CompilerIdC/a.out
 cmake-build-debug/CMakeFiles/3.12.2/CompilerIdC/CMakeCCompilerId.c
 cmake-build-debug/CMakeFiles/3.12.2/CompilerIdCXX/a.out
 cmake-build-debug/CMakeFiles/3.12.2/CompilerIdCXX/CMakeCXXCompilerId.cpp
-cmake-build-debug/deneme.xml
-cmake-build-debug/test.xml
 cmake-build-debug/TestXmlParser
 cmake-build-debug/CMakeFiles/TestXmlParser.dir/build.make
 cmake-build-debug/CMakeFiles/TestXmlParser.dir/cmake_clean.cmake
