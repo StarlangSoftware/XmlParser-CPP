@@ -14,10 +14,10 @@ private:
     string value;
 public:
     XmlAttribute();
-    explicit XmlAttribute(string name);
+    explicit XmlAttribute(const string& _name);
     string getName();
     string getValue();
-    void setValue(string value);
+    void setValue(const string& _value);
     string to_String();
 };
 

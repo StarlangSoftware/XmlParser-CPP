@@ -25,9 +25,9 @@ private:
     string getNextToken(XmlTextType xmlTextType);
     void replaceEscapeCharacters(string& token);
 public:
-    explicit XmlDocument(string fileName);
+    explicit XmlDocument(const string& _fileName);
     ~XmlDocument();
-    void print(string fileName);
+    void print(const string& _fileName);
     void parse();
     XmlElement* getFirstChild();
 };

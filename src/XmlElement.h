@@ -19,7 +19,7 @@ private:
     XmlElement* firstChild;
     XmlElement* nextSibling;
 public:
-    XmlElement(string name, XmlElement* parent);
+    XmlElement(const string& name, XmlElement* parent);
     ~XmlElement();
     string getName();
     string getPcData();
@@ -31,10 +31,10 @@ public:
     int attributeSize();
     XmlAttribute getAttribute(int index);
     void print(ofstream& outputStream, int level);
-    void setNextSibling(XmlElement* nextSibling);
-    void setFirstChild(XmlElement* firstChild);
-    void addAttribute(XmlAttribute xmlAttribute);
-    void setPcData(string pcData);
+    void setNextSibling(XmlElement* _nextSibling);
+    void setFirstChild(XmlElement* _firstChild);
+    void addAttribute(const XmlAttribute& xmlAttribute);
+    void setPcData(const string& _pcData);
     bool hasAttributes();
 };
 

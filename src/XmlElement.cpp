@@ -12,11 +12,11 @@
  * @param hasAttributes If true, the element will have attributes, otherwise it won't have.
  * @return Constructed element
  */
-XmlElement::XmlElement(string name, XmlElement* parent) {
+XmlElement::XmlElement(const string& name, XmlElement* parent) {
     this->parent = parent;
     this->nextSibling = nullptr;
     this->firstChild = nullptr;
-    this->name = move(name);
+    this->name = name;
 }
 
 /**
@@ -97,12 +97,12 @@ XmlElement::~XmlElement() {
     delete nextSibling;
 }
 
-void XmlElement::setNextSibling(XmlElement* nextSibling) {
-    this->nextSibling = nextSibling;
+void XmlElement::setNextSibling(XmlElement* _nextSibling) {
+    this->nextSibling = _nextSibling;
 }
 
-void XmlElement::setFirstChild(XmlElement* firstChild) {
-    this->firstChild = firstChild;
+void XmlElement::setFirstChild(XmlElement* _firstChild) {
+    this->firstChild = _firstChild;
 }
 
 string XmlElement::getName() {
@@ -113,12 +113,12 @@ string XmlElement::getPcData() {
     return pcData;
 }
 
-void XmlElement::addAttribute(XmlAttribute xmlAttribute) {
+void XmlElement::addAttribute(const XmlAttribute& xmlAttribute) {
     attributes.push_back(xmlAttribute);
 }
 
-void XmlElement::setPcData(string pcData) {
-    this->pcData = move(pcData);
+void XmlElement::setPcData(const string& _pcData) {
+    this->pcData = _pcData;
 }
 
 bool XmlElement::hasAttributes() {

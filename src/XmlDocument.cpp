@@ -9,11 +9,11 @@
 
 /**
  * Creates an empty xml document.
- * @param fileName Name of the xml file
+ * @param _fileName Name of the xml file
  * @return Empty xml document. Xml file is not parsed yet.
  */
-XmlDocument::XmlDocument(string fileName) {
-    this->fileName = move(fileName);
+XmlDocument::XmlDocument(const string& _fileName) {
+    this->fileName = _fileName;
     this->root = nullptr;
 }
 
@@ -166,11 +166,11 @@ string XmlDocument::getNextToken(XmlTextType xmlTextType) {
 
 /**
  * Prints xml parse tree to an xml file
- * @param fileName Output file name
+ * @param _fileName Output file name
  */
-void XmlDocument::print(string fileName) {
+void XmlDocument::print(const string& _fileName) {
     ofstream outputStream;
-    outputStream.open(fileName, ios::out);
+    outputStream.open(_fileName, ios::out);
     root->print(outputStream, 0);
     outputStream.close();
 }
@@ -259,9 +259,6 @@ void XmlDocument::parse() {
                             current->setPcData(token);
                         }
                     }
-                    break;
-                default:
-                    cout << "This token type not supported\n";
                     break;
             }
             token = getNextToken(textType);

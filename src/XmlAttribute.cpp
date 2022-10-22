@@ -6,11 +6,11 @@
 
 /**
  * Constructor for xml attribute. Initializes the attribute.
- * @param[in] name Name of the attribute
+ * @param[in] _name Name of the attribute
  * @return Allocated and initialized attribute
  */
-XmlAttribute::XmlAttribute(string name) {
-    this->name = move(name);
+XmlAttribute::XmlAttribute(const string& _name) {
+    this->name = _name;
 }
 
 string XmlAttribute::getName() {
@@ -21,8 +21,8 @@ string XmlAttribute::getValue() {
     return value;
 }
 
-void XmlAttribute::setValue(string value) {
-    this->value = move(value);
+void XmlAttribute::setValue(const string& _value) {
+    this->value = _value;
 }
 
 string XmlAttribute::to_String(){
