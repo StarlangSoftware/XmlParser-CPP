@@ -37,8 +37,8 @@ void XmlElement::setAttributeValue(const string& attributeName, const string& at
  * @param[in] attributeName Name of the attribute
  * @return If the Xml element has such an attribute returns its value, otherwise it returns NULL
  */
-string XmlElement::getAttributeValue(const string& attributeName) {
-    for (XmlAttribute xmlAttribute : attributes){
+string XmlElement::getAttributeValue(const string& attributeName) const{
+    for (const XmlAttribute& xmlAttribute : attributes){
         if (xmlAttribute.getName() == attributeName){
             return xmlAttribute.getValue();
         }
@@ -58,7 +58,7 @@ void XmlElement::print(ofstream& outputStream, int level){
     }
     outputStream << "<";
     outputStream << name;
-    for (XmlAttribute xmlAttribute : attributes){
+    for (const XmlAttribute& xmlAttribute : attributes){
         outputStream << " " << xmlAttribute.to_String();
     }
     if (firstChild == nullptr){
@@ -80,15 +80,15 @@ void XmlElement::print(ofstream& outputStream, int level){
     }
 }
 
-XmlElement* XmlElement::getFirstChild() {
+XmlElement* XmlElement::getFirstChild() const{
     return firstChild;
 }
 
-XmlElement* XmlElement::getNextSibling() {
+XmlElement* XmlElement::getNextSibling() const{
     return nextSibling;
 }
 
-XmlElement* XmlElement::getParent() {
+XmlElement* XmlElement::getParent() const{
     return parent;
 }
 
@@ -105,11 +105,11 @@ void XmlElement::setFirstChild(XmlElement* _firstChild) {
     this->firstChild = _firstChild;
 }
 
-string XmlElement::getName() {
+string XmlElement::getName() const{
     return name;
 }
 
-string XmlElement::getPcData() {
+string XmlElement::getPcData() const{
     return pcData;
 }
 
@@ -121,14 +121,14 @@ void XmlElement::setPcData(const string& _pcData) {
     this->pcData = _pcData;
 }
 
-bool XmlElement::hasAttributes() {
+bool XmlElement::hasAttributes() const{
     return !attributes.empty();
 }
 
-int XmlElement::attributeSize() {
+int XmlElement::attributeSize() const{
     return attributes.size();
 }
 
-XmlAttribute XmlElement::getAttribute(int index) {
+XmlAttribute XmlElement::getAttribute(int index) const{
     return attributes.at(index);
 }

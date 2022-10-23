@@ -13,19 +13,19 @@ XmlAttribute::XmlAttribute(const string& _name) {
     this->name = _name;
 }
 
-string XmlAttribute::getName() {
+string XmlAttribute::getName() const{
     return name;
 }
 
-string XmlAttribute::getValue() {
+string XmlAttribute::getValue() const{
     return value;
 }
 
-void XmlAttribute::setValue(const string& _value) {
+void XmlAttribute::setValue(const string& _value){
     this->value = _value;
 }
 
-string XmlAttribute::to_String(){
+string XmlAttribute::to_String() const{
     return name + "=\"" + value + "\"";
 }
 
