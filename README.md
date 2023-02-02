@@ -1,6 +1,6 @@
 For Developers
 ============
-You can also see [Js](https://github.com/starlangsoftware/Util-Js) repository.
+You can also see [C](https://github.com/starlangsoftware/XmlParser-C), [Java](https://github.com/starlangsoftware/XmlParser), or [Js](https://github.com/starlangsoftware/XmlParser-Js) repository.
 
 ## Requirements
 
