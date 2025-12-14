@@ -15,10 +15,10 @@ private:
 public:
     XmlAttribute();
     explicit XmlAttribute(const string& _name);
-    string getName() const;
-    string getValue() const;
+    [[nodiscard]] string getName() const;
+    [[nodiscard]] string getValue() const;
     void setValue(const string& _value);
-    string to_String() const;
+    [[nodiscard]] string to_String() const;
 };
 
 

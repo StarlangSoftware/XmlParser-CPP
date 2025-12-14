@@ -21,21 +21,21 @@ private:
 public:
     XmlElement(const string& name, XmlElement* parent);
     ~XmlElement();
-    string getName() const;
-    string getPcData() const;
-    XmlElement* getFirstChild() const;
-    XmlElement* getNextSibling() const;
-    XmlElement* getParent() const;
+    [[nodiscard]] string getName() const;
+    [[nodiscard]] string getPcData() const;
+    [[nodiscard]] XmlElement* getFirstChild() const;
+    [[nodiscard]] XmlElement* getNextSibling() const;
+    [[nodiscard]] XmlElement* getParent() const;
     void setAttributeValue(const string& attributeName, const string& attributeValue);
-    string getAttributeValue(const string& attributeName) const;
-    int attributeSize() const;
-    XmlAttribute getAttribute(int index) const;
+    [[nodiscard]] string getAttributeValue(const string& attributeName) const;
+    [[nodiscard]] int attributeSize() const;
+    [[nodiscard]] XmlAttribute getAttribute(int index) const;
     void print(ofstream& outputStream, int level);
     void setNextSibling(XmlElement* _nextSibling);
     void setFirstChild(XmlElement* _firstChild);
     void addAttribute(const XmlAttribute& xmlAttribute);
     void setPcData(const string& _pcData);
-    bool hasAttributes() const;
+    [[nodiscard]] bool hasAttributes() const;
 };
 
 
